@@ -67,8 +67,9 @@ namespace Trees
             {
                 return -1;
             }
-            
+
             int maxChildHeight = 0;
+            
             for(int i = 0; i < Children.Count(); i++)
             {
                 TreeNode<T> child = Children.Get(i);
