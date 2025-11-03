@@ -1,13 +1,18 @@
 namespace Lists;
 
+//TODO #1: Copy your List<T> class (List.cs) to this project and overwrite this file.
+
 using Lists;
 using System.Collections;
+using System.Collections.Concurrent;
+using System.Diagnostics.Contracts;
 using System.Runtime.InteropServices;
 
 public class ListNode<T>
 {
     public T Value;
     public ListNode<T> Next = null;
+    public ListNode<T> Previus = null;
 
     
 
@@ -54,7 +59,7 @@ public class List<T> : IList<T>
     {
         //TODO #2: return the element on the index-th position. O if the position is out of bounds
 
-        if (index < 0)
+        if (index < 0 || index >= m_numItems)
         {
             return default(T);
         }
@@ -73,7 +78,6 @@ public class List<T> : IList<T>
         }
         
         return default(T);
-        
     }
 
     public void Add(T value)
@@ -90,6 +94,7 @@ public class List<T> : IList<T>
         else
         {
             Last.Next = newNode;
+            newNode.Previus = Last;
             Last = newNode;
         }
 
@@ -105,36 +110,51 @@ public class List<T> : IList<T>
             return default(T);
         }
 
-        T value = Get(index);
+        ListNode<T> current;
+        int count;
 
-        if (index == 0)
+        if (index < m_numItems / 2)
         {
-            First = First.Next;
-
-            if (First == null)
+            current = First;
+            count = 0;
+            while (count < index)
             {
-                Last = null;
+                current = current.Next;
+                count++;
             }
-            m_numItems--;
-            return value;
+        }
+        else
+        {
+            current = Last;
+            count = m_numItems - 1;
+            while (count > index)
+            {
+                current = current.Previus;
+                count--;
+            }
         }
 
-        ListNode<T> previus = First;
-        for(int i = 0; i < index - 1; i++)
+        T value = current.Value;
+
+        if (current.Previus != null)
         {
-            previus = previus.Next;
+            current.Previus.Next = current.Next;
+        }
+        else
+        {
+            First = current.Next;
         }
 
-        ListNode<T> nodeToEliminated = previus.Next;
-        previus.Next = nodeToEliminated.Next;
-
-        if (nodeToEliminated == Last)
+        if (current.Next != null)
         {
-            Last = previus;
+            current.Next.Previus = current.Previus;
+        }
+        else
+        {
+            Last = current.Previus;
         }
 
         m_numItems--;
-
         return value;
     }
 
