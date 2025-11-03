@@ -73,6 +73,10 @@ namespace BinaryTrees
             return values;
         }
 
+        //TODO #7:  Given an array of keys and an array of values, this method must:
+            //          - Create a new tree node with the key/values in the center of the [start,end] section of the arrays
+            //          - Recursive call to AddBalanced with the elements on the left of center [start,center-1]. Add the result to the new node as LeftNode
+            //          - Recursive call to AddBalanced with the elements on the right of center [center+1,end]. Add the result to the new node as RightNode
         private BinaryTreeNode<TKey, TValue> AddBalanced(TKey[] keys, TValue[] values, int start, int end)
         {
             int center;
